@@ -1,8 +1,33 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function AddUsuario(props) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+
+  const headers = { headers: { Authorization: "maxuel-lima-krexu" } };
+
+  const body = {
+    name: nome,
+    email: email,
+  };
+  const createUser = () => {
+    axios
+      .post(
+        "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users",
+        body,
+        headers
+      )
+      .then(() => {
+        alert("Usuário cadastrado");
+        setEmail("");
+        setNome("");
+        props.getAllUsers();
+      })
+      .catch((erro) => {
+        console.log(erro.response);
+      });
+  };
 
   return (
     <>
@@ -22,9 +47,8 @@ function AddUsuario(props) {
           setEmail(e.target.value);
         }}
       />
-      <button>Enviar</button>
+      <button onClick={createUser}>Enviar</button>
     </>
   );
 }
-
 export default AddUsuario;
